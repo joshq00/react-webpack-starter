@@ -1,5 +1,5 @@
-import 'style/main.less';
+import './style/main.less';
 import React from 'react';
-import App from 'app';
+import MyApp from './myapp';
 
-React.render( <App title='My App' />, document.body );
+React.render( <MyApp title='My App' />, document.body );

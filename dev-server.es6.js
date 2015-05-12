@@ -1,23 +1,24 @@
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import express from 'express';
+import { app, server } from './app';
+
 import config from './webpack.dev.config.es6';
-// import './server';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 
-console.log( config );
+import './app/listeners';
 
-let app = new WebpackDevServer( webpack( config ), {
-	publicPath: config.output.publicPath,
-	hot: true,
+const compiler = webpack( config );
+const options = {
+	publicPath: '/build',
+	noInfo: true,
 	historyApiFallback: true
-} );
-// app.use( '/', express.static( 'public' ) );
-// app.use( '/node_modules', express.static( 'node_modules' ) );
+};
 
+app
+	.use( webpackDevMiddleware( compiler, options ) )
+	.use( webpackHotMiddleware( compiler ) )
+	.use( express.static( '.' ) )
+	;
 
-app.listen( config.port, function ( err, result ) {
-	if ( err ) {
-		console.log( err );
-	}
-
-	console.log( 'Listening at localhost:' + config.port );
-} );
+server.listen( 3000 );
