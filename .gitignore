@@ -5,3 +5,4 @@ webpack.config.js
 build
 coverage
 *.sublime-workspace
+karma_html
