@@ -40,9 +40,9 @@ export default class MyApp extends React.Component {
 		console.log( 'updating' );
 	}
 	todosChanged () {
-//		clearTimeout( this._TO );
-//		this._TO = setTimeout( this.updateTodos, 50 );
-		this.updateTodos();
+		clearTimeout( this._TO );
+		this._TO = setTimeout( this.updateTodos, 50 );
+		// this.updateTodos();
 	}
 
 	render () {

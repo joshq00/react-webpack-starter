@@ -32,6 +32,10 @@ describe( 'todo-store', function () {
 		init( todos );
 		expectLength( 2 );
 
+		// re-adding doesn't dupe
+		todos.forEach( add );
+		expectLength( 2 );
+
 		// doesn't exist
 		remove( 3 );
 		expectLength( 2 );

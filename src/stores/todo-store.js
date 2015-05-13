@@ -31,11 +31,13 @@ export default store;
 
 
 let todos = {};
-// let mapped = [];
+let mapped = [];
+
 // let _updateTo;
 function init ( items ) {
 	// Object.keys( todos ).forEach( key => delete todos[ key ] );
 	todos = {};
+	mapped = [];
 	if ( Array.isArray( items ) ) {
 		items.forEach( addTodo );
 	}
@@ -43,29 +45,28 @@ function init ( items ) {
 init();
 
 function addTodo ( todo ) {
+	if ( !( todo.id in todos ) ) {
+		mapped.push( todo );
+	} else {
+		mapped[ mapped.indexOf( todos[ todo.id ] ) ] = todo;
+	}
 	todos[ todo.id ] = todo;
-	remapAsync();
+	store.emit();
 }
 
 function getTodo ( id ) {
 	return todos[ id ];
 }
 function getAllTodos () {
-	return Object.keys( todos ).map( id => todos[ id ] );
+	return mapped;
 }
 
 function removeTodo ( id ) {
-	if ( getTodo( id ) == null ) {
+	let todo = store.get( id );
+	if ( todo == null ) {
 		return;
 	}
 	delete todos[ id ];
-	remapAsync();
-}
-function remap () {
+	mapped.splice( mapped.indexOf( todo ), 1 );
 	store.emit();
-}
-function remapAsync () {
-	remap();
-	// clearTimeout( _updateTo );
-	// _updateTo = setTimeout( remap, 100 );
 }
