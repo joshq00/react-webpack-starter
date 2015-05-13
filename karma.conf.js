@@ -4,6 +4,15 @@ require( 'babel/register' );
 var extend = require( 'util' )._extend;
 var webpackCfg = extend( {}, require( './webpack.config.es6' ) );
 webpackCfg.devtool = 'inline-source-map';
+webpackCfg.module = extend( {}, webpackCfg.module );
+extend( webpackCfg.module, {
+	postLoaders: [ { // << add subject as webpack's postloader
+		test: /\.js$/,
+		exclude: /(__tests__|node_modules|bower_components)/,
+		loader: 'istanbul-instrumenter'
+	} ]
+} );
+console.log( webpackCfg.module );
 
 module.exports = function ( config ) {
 	config.set( {
@@ -25,10 +34,11 @@ module.exports = function ( config ) {
 		// list of files / patterns to load in the browser
 		files: [
 			'./node_modules/phantomjs-polyfill/bind-polyfill.js',
+			'./node_modules/babel-core/browser-polyfill.js',
 			// 'tests.webpack.js'
 			{
 				// pattern: 'src/**/__tests__/*-test.js'
-				pattern: 'src/**/*-test.js'
+				pattern: 'src/**/__tests__/*-test.js'
 			}
 		],
 
@@ -41,10 +51,10 @@ module.exports = function ( config ) {
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors: {
 			// 'tests.webpack.js': [ 'webpack', 'sourcemap', 'coverage' ]
-			'node_modules/**/*': [],
-			'src/**/__tests__/*-test.js': [ 'webpack' ],
-			'src/**/*.js': [ 'webpack', 'coverage' ],
-			'src/**/*.jsx': [ 'webpack', 'coverage' ]
+			'src/**/__tests__/*-test.js': [ 'webpack' ]
+			// 'src/**/!(__tests__)/*.js': [ 'webpack', 'coverage' ],
+			// 'src/**/*.js': [ 'webpack' ],
+			// 'src/**/*.jsx': [ 'webpack' ]
 		},
 
 		webpack: webpackCfg,
@@ -57,7 +67,7 @@ module.exports = function ( config ) {
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
 		// reporters: [ 'progress' ],
-		reporters: [ 'spec', 'coverage' ],
+		reporters: [ 'progress', 'coverage' ],
 
 
 		// web server port
@@ -70,6 +80,7 @@ module.exports = function ( config ) {
 
 		// level of logging
 		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+		// logLevel: config.LOG_INFO,
 		logLevel: config.LOG_INFO,
 
 

@@ -21,11 +21,11 @@ function getAll () {
 function remove ( id ) {
 	let todo = get( id );
 	if ( !( todo instanceof Todo ) ) {
-		throw new Error( `Invalid Todo: "${id}"` );
+		return;
+		// throw new Error( `Invalid Todo: "${id}"` );
 	}
 
 	delete todos[ id ];
-	console.log( 'trying to remove', id );
 	emit( REMOVE, id );
 }
 

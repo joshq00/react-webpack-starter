@@ -3,3 +3,5 @@ webpack.config.js
 npm-debug.log
 webpack.config.js
 build
+coverage
+*.sublime-workspace

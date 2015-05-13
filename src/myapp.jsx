@@ -1,7 +1,11 @@
 import React from 'react';
+import Modifier from 'todo/modify';
 import TodoList from 'todo/list';
 import TodoForm from 'todo/form';
 import todoStore from 'stores/todo-store';
+
+global.React = React;
+global.store = todoStore;
 
 import { INIT, ADD, REMOVE, init, add, remove } from 'actions/todo-actions';
 import io from 'io';
@@ -14,6 +18,7 @@ export default class MyApp extends React.Component {
 		super( props );
 		this.state = { todos: todoStore.get() };
 		this.todosChanged = this.todosChanged.bind( this );
+		this.updateTodos = this.updateTodos.bind( this );
 	}
 
 	componentDidMount () {
@@ -23,17 +28,28 @@ export default class MyApp extends React.Component {
 	componentWillUnmount () {
 		todoStore.off( this.todosChanged );
 	}
-
-	todosChanged () {
+	updateTodos () {
+/*
+		let todos = [ ...todoStore.get() ];
+		todos.reverse();
+*/
+		let todos = todoStore.get();
 		this.setState( {
-			todos: todoStore.get()
+			todos
 		} );
+		console.log( 'updating' );
+	}
+	todosChanged () {
+//		clearTimeout( this._TO );
+//		this._TO = setTimeout( this.updateTodos, 50 );
+		this.updateTodos();
 	}
 
 	render () {
 		return (
 		<div>
 			<h1>{ this.props.title }</h1>
+			<Modifier />
 			<TodoForm />
 			<TodoList { ...this.state } />
 		</div>

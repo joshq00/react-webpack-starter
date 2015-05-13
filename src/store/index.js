@@ -8,12 +8,12 @@ import { EventEmitter } from 'events';
 export default class Store extends EventEmitter {
 	constructor ( dispatcher ) {
 		super();
-		this.dispatcher = dispatcher;
-		this.token = dispatcher.register( this.onAction.bind( this ) );
-
 		if ( this.onAction === Store.prototype.onAction ) {
 			throw new Error( 'Child class must implement `onAction( payload )`' );
 		}
+
+		this.dispatcher = dispatcher;
+		this.token = dispatcher.register( this.onAction.bind( this ) );
 	}
 
 	/**
@@ -48,7 +48,10 @@ export default class Store extends EventEmitter {
 	 * @return {Store}
 	 */
 	on ( fn ) {
-		this.addListener( fn );
+		if ( typeof arguments[ 0 ] === 'string' ) {
+			fn = arguments[ 1 ];
+		}
+		this.addListener( this.eventName, fn );
 		return this;
 	}
 
@@ -59,6 +62,9 @@ export default class Store extends EventEmitter {
 	 * @return {Store}
 	 */
 	once ( fn ) {
+		if ( typeof arguments[ 0 ] === 'string' ) {
+			fn = arguments[ 1 ];
+		}
 		super.once( this.eventName, fn );
 		return this;
 	}
@@ -70,19 +76,19 @@ export default class Store extends EventEmitter {
 	 * @return {Store}
 	 */
 	off ( fn ) {
-		this.removeListener( fn );
+		this.removeListener( this.eventName, fn );
 		return this;
 	}
 
-	addListener ( fn ) {
-		super.addListener( this.eventName, fn );
-		return this;
-	}
+	// addListener ( fn ) {
+	// 	super.addListener( this.eventName, fn );
+	// 	return this;
+	// }
 
-	removeListener ( fn ) {
-		super.removeListener( this.eventName, fn );
-		return this;
-	}
+	// removeListener ( fn ) {
+	// 	super.removeListener( this.eventName, fn );
+	// 	return this;
+	// }
 
 	removeAllListeners () {
 		super.removeAllListeners( this.eventName );

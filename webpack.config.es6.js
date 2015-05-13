@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import path from 'path';
 const target = 'web';
 
@@ -14,7 +15,7 @@ let output = {
 let loaders = [ {
 	test: /\.jsx?$/,
 	loaders: [
-		'babel'
+		'babel?optional=runtime'
 	],
 	exclude: /node_modules/
 }, {
@@ -42,6 +43,8 @@ let resolve = {
 };
 
 let plugins = [
+	new webpack.optimize.DedupePlugin()
+	// new webpack.optimize.CommonsChunkPlugin( 'common.js' )
 ];
 
 let node = {

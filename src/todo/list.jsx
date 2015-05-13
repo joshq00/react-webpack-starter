@@ -8,7 +8,8 @@ export default class TodoList extends React.Component {
 
 		return (
 		<div className='todo-list'>
-			{ this.props.todos.map( Todo ) }
+			<div>{ this.props.todos.length }</div>
+			{ this.props.todos.slice( 0, 100 ).map( Todo ) }
 		</div>
 		);
 	}

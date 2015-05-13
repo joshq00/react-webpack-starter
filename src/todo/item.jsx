@@ -14,7 +14,7 @@ export default class TodoItem extends React.Component {
 				X
 			</button>
 
-			{ todo.title }
+			{ todo.id } : { todo.title }
 		</div>
 		);
 	}
@@ -23,6 +23,6 @@ export default class TodoItem extends React.Component {
 TodoItem.propTypes = {
 	todo: React.PropTypes.shape( {
 		id: React.PropTypes.number.isRequired,
-		title: React.PropTypes.string.isRequired
+		title: React.PropTypes.any.isRequired
 	} )
 };
