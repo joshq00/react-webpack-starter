@@ -1,6 +1,6 @@
-import dispatcher from 'dispatcher';
-import Store from 'store';
-import { INIT, ADD, REMOVE } from 'actions/todo-actions';
+import dispatcher from '../dispatcher';
+import Store from '../store';
+import { INIT, ADD, REMOVE } from '../actions/todo-actions';
 
 class TodoStore extends Store {
 	onAction ( payload ) {
@@ -9,12 +9,19 @@ class TodoStore extends Store {
 		switch ( type ) {
 		case INIT:
 			init( data );
+			// this.emit();
 			break;
 		case ADD:
 			addTodo( data );
+			this.emit();
+			break;
+		case 'RAW_TODOS':
+			data.forEach( addTodo );
+			this.emit();
 			break;
 		case REMOVE:
 			removeTodo( data );
+			this.emit();
 			break;
 		}
 	}
@@ -29,44 +36,66 @@ class TodoStore extends Store {
 let store = new TodoStore( dispatcher );
 export default store;
 
-
 let todos = {};
-let mapped = [];
+// let mapped = [];
+let mapped = new Set();
+// let cached = [];
 
 // let _updateTo;
 function init ( items ) {
 	// Object.keys( todos ).forEach( key => delete todos[ key ] );
 	todos = {};
-	mapped = [];
+	// mapped = [];
+	mapped = new Set();
+	// cached = [];
+
 	if ( Array.isArray( items ) ) {
 		items.forEach( addTodo );
 	}
 }
-init();
 
 function addTodo ( todo ) {
 	if ( !( todo.id in todos ) ) {
-		mapped.push( todo );
+		// mapped.push( todo );
+		todos[ todo.id ] = todo;
+		mapped.add( todo );
 	} else {
-		mapped[ mapped.indexOf( todos[ todo.id ] ) ] = todo;
+		// mapped[ mapped.indexOf( todos[ todo.id ] ) ] = todo;
+		todos[ todo.id ].title = todo.title;
 	}
-	todos[ todo.id ] = todo;
-	store.emit();
 }
 
 function getTodo ( id ) {
 	return todos[ id ];
 }
 function getAllTodos () {
-	return mapped;
+	// return [ ...mapped ];
+	try {
+		console.time( 'getAll' );
+		return Object.keys( todos ).map( key => todos[ key ] );
+	} finally {
+		console.timeEnd( 'getAll' );
+	}
 }
 
 function removeTodo ( id ) {
-	let todo = store.get( id );
-	if ( todo == null ) {
-		return;
+	if ( id in todos ) {
+		// mapped.splice( mapped.indexOf( todos[ id ] ), 1 );
+		mapped.delete( todos[ id ] );
+		delete todos[ id ];
 	}
-	delete todos[ id ];
-	mapped.splice( mapped.indexOf( todo ), 1 );
-	store.emit();
+	return;
+
+	// let todo = store.get( id );
+	// if ( todo == null ) {
+	// 	return;
+	// }
+	if ( id in todos ) {
+		// mapped.splice( mapped.indexOf( todos[ id ] ), 1 );
+		mapped.delete( todos[ id ] );
+		delete todos[ id ];
+	}
+	// mapped.splice( mapped.indexOf( todo ), 1 );
+	// mapped = mapped.filter( item => item === todo );
+	// store.emit();
 }

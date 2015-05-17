@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+	main {
+		float: left;
+		width: 50%;
+		margin: 6em 0 0;
+	}</style>
+</head>
+<body>
+	<main><%- reactOutput %></main>
+	<div class='two'></div>
+	<div class='three'></div>
+
+	<script src="node_modules/babel-core/browser-polyfill.min.js"></script>
+	<script src="node_modules/eventsource-polyfill/dist/eventsource.js"></script>
+	<script>ALL_TODOS = <%- ALL_TODOS %></script>
+	<script src="build/index.js"></script>
+</body>
+</html>

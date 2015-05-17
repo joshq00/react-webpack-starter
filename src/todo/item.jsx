@@ -1,7 +1,9 @@
 import React from 'react';
-import { REMOVE } from 'actions/todo-actions';
-import io from 'io';
-let remove = id => io.emit( REMOVE, id );
+// import { REMOVE } from '../actions/todo-actions';
+// import io from '../io';
+// let remove = id => io.emit( REMOVE, id );
+import dispatcher from '../dispatcher';
+let remove = id => dispatcher.dispatch( { type: 'CLICK_REMOVE_TODO', data: id } );
 
 export default class TodoItem extends React.Component {
 	render () {
@@ -14,7 +16,7 @@ export default class TodoItem extends React.Component {
 				X
 			</button>
 
-			{ todo.id } : { todo.title }
+			{ todo.id } - { todo.title }
 		</div>
 		);
 	}

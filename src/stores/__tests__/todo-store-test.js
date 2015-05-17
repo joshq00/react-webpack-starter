@@ -14,6 +14,8 @@ function getLength () {
 function expectLength ( length ) {
 	expect( getLength() ).to.equal( length );
 }
+
+
 describe( 'todo-store', function () {
 	it( 'should be empty', () => {
 		expectLength( 0 );
