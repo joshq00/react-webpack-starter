@@ -1,101 +1,95 @@
 import dispatcher from '../dispatcher';
 import Store from '../store';
-import { INIT, ADD, REMOVE } from '../actions/todo-actions';
+import {
+	INIT,
+	ADD,
+	REMOVE
+} from '../constants/todo-constants';
 
 class TodoStore extends Store {
-	onAction ( payload ) {
-		let { type, data } = payload;
-
-		switch ( type ) {
-		case INIT:
-			init( data );
-			// this.emit();
-			break;
-		case ADD:
-			addTodo( data );
-			this.emit();
-			break;
-		case 'RAW_TODOS':
-			data.forEach( addTodo );
-			this.emit();
-			break;
-		case REMOVE:
-			removeTodo( data );
-			this.emit();
-			break;
-		}
-	}
-
-	get ( id ) {
-		if ( id == null ) {
-			return getAllTodos();
-		}
+	getOne ( id ) {
 		return getTodo( id );
 	}
+
+	get () {
+		return getAllTodos();
+	}
 }
-let store = new TodoStore( dispatcher );
+
+const store = new TodoStore();
 export default store;
 
-let todos = {};
-// let mapped = [];
-let mapped = new Set();
-// let cached = [];
+export const handler = ( payload ) => {
+	let { type, data } = payload;
 
-// let _updateTo;
-function init ( items ) {
-	// Object.keys( todos ).forEach( key => delete todos[ key ] );
-	todos = {};
-	// mapped = [];
-	mapped = new Set();
-	// cached = [];
-
-	if ( Array.isArray( items ) ) {
-		items.forEach( addTodo );
+	switch ( type ) {
+	case INIT:
+		init( data );
+		store.emit();
+		break;
+	case ADD:
+		addTodos( data );
+		store.emit();
+		break;
+	case REMOVE:
+		removeTodos( data );
+		store.emit();
+		break;
 	}
-}
+};
 
-function addTodo ( todo ) {
-	if ( !( todo.id in todos ) ) {
-		// mapped.push( todo );
-		todos[ todo.id ] = todo;
-		mapped.add( todo );
-	} else {
-		// mapped[ mapped.indexOf( todos[ todo.id ] ) ] = todo;
-		todos[ todo.id ].title = todo.title;
-	}
-}
+export const token = dispatcher.register( handler );
 
+let _todos = {};
+
+/* getters */
 function getTodo ( id ) {
-	return todos[ id ];
+	return _todos[ id ];
 }
 function getAllTodos () {
-	// return [ ...mapped ];
-	try {
-		console.time( 'getAll' );
-		return Object.keys( todos ).map( key => todos[ key ] );
-	} finally {
-		console.timeEnd( 'getAll' );
+	return Object.keys( _todos ).map( key => _todos[ key ] );
+}
+
+/* initialize */
+function init ( todos ) {
+	_todos = {};
+
+	if ( Array.isArray( todos ) ) {
+		todos.forEach( addTodo );
 	}
 }
 
-function removeTodo ( id ) {
-	if ( id in todos ) {
-		// mapped.splice( mapped.indexOf( todos[ id ] ), 1 );
-		mapped.delete( todos[ id ] );
-		delete todos[ id ];
-	}
-	return;
+let i = 0;
+function getNextId () {
+	return i++;
+}
+class Todo {
+	constructor ( { id, title } ) {
+		if ( id == null ) {
+			id = getNextId();
+		}
 
-	// let todo = store.get( id );
-	// if ( todo == null ) {
-	// 	return;
-	// }
-	if ( id in todos ) {
-		// mapped.splice( mapped.indexOf( todos[ id ] ), 1 );
-		mapped.delete( todos[ id ] );
-		delete todos[ id ];
+		this.id = id;
+		this.title = title;
 	}
-	// mapped.splice( mapped.indexOf( todo ), 1 );
-	// mapped = mapped.filter( item => item === todo );
-	// store.emit();
+}
+
+/* add */
+function addTodos ( todos ) {
+	todos.forEach( addTodo );
+}
+function addTodo ( todo ) {
+	todo = new Todo( todo );
+	_todos[ todo.id ] = todo;
+}
+
+
+/* remove */
+function removeTodos ( ids ) {
+	ids.forEach( removeTodo );
+}
+function removeTodo ( id ) {
+	if ( id in _todos ) {
+		delete _todos[ id ];
+	}
 }

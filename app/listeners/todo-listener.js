@@ -1,7 +1,12 @@
 import io from '../io';
 import Todo from '../todo';
 
-import { INIT, ADD, REMOVE, add, remove } from '../../src/actions/todo-actions';
+import {
+	ADD,
+	REMOVE
+} from '../../src/constants/todo-constants';
+
+import { add, remove } from '../../src/actions/todo-actions';
 
 // const todos = {};
 
@@ -30,19 +35,21 @@ import { INIT, ADD, REMOVE, add, remove } from '../../src/actions/todo-actions';
 // }
 
 function emit ( action, data ) {
+	console.log( 'emitting' );
 	io.emit( action, data );
 	console.log( `${ action } ${ JSON.stringify( data ) }` );
 }
 io.on( 'connection', socket => {
 	console.log( 'connection established.' );
-	// socket.emit( INIT, getAll() );
-	socket.on( ADD, data => {
-		let todo = new Todo( data );
-		add( todo );
-		emit( ADD, todo );
+
+	socket.on( ADD, todos => {
+		todos = todos.map( todo => new Todo( todo ) );
+		add( todos );
+		emit( ADD, todos );
 	} );
-	socket.on( REMOVE, data => {
-		remove( data );
-		emit( REMOVE, data );
+
+	socket.on( REMOVE, ids => {
+		remove( ids );
+		emit( REMOVE, ids );
 	} );
 } );

@@ -12,7 +12,6 @@ extend( webpackCfg.module, {
 		loader: 'istanbul-instrumenter'
 	} ]
 } );
-console.log( webpackCfg.module );
 
 module.exports = function ( config ) {
 	config.set( {

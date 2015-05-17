@@ -1,6 +1,5 @@
 import express from 'express';
 import { app, server } from './app';
-import routes from './app/routes';
 
 import config from './webpack.dev.config.es6';
 import webpack from 'webpack';
@@ -20,10 +19,19 @@ app
 	.use( webpackDevMiddleware( compiler, options ) )
 	.use( webpackHotMiddleware( compiler ) )
 	.use( express.static( '.' ) )
-	.use( routes )
 	;
 
 import path from 'path';
+import { render } from './src';
+import TodoStore from './src/stores/todo-store';
+app.get( '/todos.json', ( rq, rs ) => {
+	rs.json( TodoStore.get() );
+} );
+app.get( '/', ( rq, rs ) => {
+	let html = render();
+	rs.render( 'index.ejs', { html } );
+} );
+
 
 app.set( 'view engine', 'ejs' );
 app.set( 'views', path.join( __dirname, 'app', 'views' ) );

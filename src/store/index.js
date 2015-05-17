@@ -6,15 +6,15 @@ import { EventEmitter } from 'events';
  * Children need to implement `onAction( payload ): void`
  */
 export default class Store extends EventEmitter {
-	constructor ( dispatcher ) {
-		super();
-		if ( this.onAction === Store.prototype.onAction ) {
-			throw new Error( 'Child class must implement `onAction( payload )`' );
-		}
+	// constructor ( dispatcher ) {
+	// 	super();
+	// 	if ( this.onAction === Store.prototype.onAction ) {
+	// 		throw new Error( 'Child class must implement `onAction( payload )`' );
+	// 	}
 
-		this.dispatcher = dispatcher;
-		this.token = dispatcher.register( this.onAction.bind( this ) );
-	}
+	// 	this.dispatcher = dispatcher;
+	// 	this.token = dispatcher.register( this.onAction.bind( this ) );
+	// }
 
 	/**
 	 * Handle action from dispatcher
@@ -23,7 +23,7 @@ export default class Store extends EventEmitter {
 	 *
 	 * @param  {any} payload data from dispatcher
 	 */
-	onAction ( payload ) {}
+	// onAction ( payload ) {}
 
 	/**
 	 * Wait for other stores
@@ -97,8 +97,8 @@ export default class Store extends EventEmitter {
 
 	destroy () {
 		this.removeAllListeners();
-		this.dispatcher.unregister( this.token );
-		delete this.dispatcher;
+		// this.dispatcher.unregister( this.token );
+		// delete this.dispatcher;
 	}
 }
 Store.prototype.eventName = 'CHANGE';

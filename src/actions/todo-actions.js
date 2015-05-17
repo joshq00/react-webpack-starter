@@ -1,8 +1,10 @@
 import dispatcher from '../dispatcher';
-
-export const INIT = 'INIT_TODOS';
-export const ADD = 'ADD_TODO';
-export const REMOVE = 'REMOVE_TODO';
+import {
+	INIT,
+	ADD,
+	REMOVE,
+	CLICK_REMOVE
+} from '../constants/todo-constants';
 
 function dispatch ( action, data ) {
 	dispatcher.dispatch( {
@@ -13,15 +15,20 @@ function dispatch ( action, data ) {
 
 /* Initialize Todos */
 export function init ( todos ) {
-	dispatch( INIT, ...arguments );
+	dispatch( INIT, todos );
 }
 
-/* Add a new Todo */
-export function add ( todo ) {
-	dispatch( ADD, ...arguments );
+/* Add new Todos */
+export function add ( todos ) {
+	dispatch( ADD, todos );
 }
 
-/* Remove a Todo */
-export function remove ( id ) {
-	dispatch( REMOVE, ...arguments );
+/* Remove Todos by id */
+export function remove ( ids ) {
+	dispatch( REMOVE, ids );
+}
+
+/* Click remove on Todo */
+export function clickRemove ( todo ) {
+	dispatch( CLICK_REMOVE, todo );
 }
