@@ -19,7 +19,7 @@ let entry = Object.keys( cfg.entry ).reduce( ( map, key ) => {
 	return map;
 }, {} );
 
-let { output } = cfg;
+let { output, externals } = cfg;
 
 let loaders = [ {
 	test: /\.jsx?$/,
@@ -43,7 +43,7 @@ export default {
 	module: { loaders },
 	entry,
 	output,
-	// externals,
+	externals,
 	resolve,
 	plugins,
 	port,

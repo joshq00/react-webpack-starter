@@ -12,7 +12,7 @@ extend( webpackCfg.module, {
 		loader: 'istanbul-instrumenter'
 	} ]
 } );
-console.log( webpackCfg.module );
+webpackCfg.externals = [];
 
 module.exports = function ( config ) {
 	config.set( {
@@ -32,6 +32,7 @@ module.exports = function ( config ) {
 
 
 		// list of files / patterns to load in the browser
+
 		files: [
 			'./node_modules/phantomjs-polyfill/bind-polyfill.js',
 			'./node_modules/babel-core/browser-polyfill.js',

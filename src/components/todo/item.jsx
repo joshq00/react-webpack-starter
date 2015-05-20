@@ -1,20 +1,28 @@
 import React from 'react';
-import { REMOVE } from 'actions/todo-actions';
-import io from 'io';
-let remove = id => io.emit( REMOVE, id );
+import { clickRemove } from '../../actions/todo-actions';
 
 export default class TodoItem extends React.Component {
+	constructor ( props ) {
+		super( props );
+		this._remove = this._remove.bind( this );
+	}
+
+	_remove () {
+		let { todo } = this.props;
+		clickRemove( todo );
+	}
+
 	render () {
 		let { todo } = this.props;
 		return (
 		<div className='todo-item'>
 			<button
 				className='remove'
-				onClick={ () => remove( todo.id ) } >
+				onClick={ this._remove } >
 				X
 			</button>
 
-			{ todo.id } : { todo.title }
+			{ todo.id } - { todo.title }
 		</div>
 		);
 	}

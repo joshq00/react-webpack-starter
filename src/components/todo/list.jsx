@@ -6,10 +6,11 @@ export default class TodoList extends React.Component {
 		let Todo = ( todo, i ) =>
 			<Item key={ todo.id } todo={ todo } />;
 
+		let { todos } = this.props;
 		return (
 		<div className='todo-list'>
-			<div>{ this.props.todos.length }</div>
-			{ this.props.todos.slice( 0, 100 ).map( Todo ) }
+			<div>{ todos.length }</div>
+			{ todos.slice( 0, 100 ).map( Todo ) }
 		</div>
 		);
 	}

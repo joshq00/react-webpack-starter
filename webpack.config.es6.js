@@ -12,6 +12,11 @@ let output = {
 	filename: '[name].js'
 };
 
+let externals = {
+	'socket.io-client': 'io',
+	'react': 'React'
+};
+
 let loaders = [ {
 	test: /\.jsx?$/,
 	loaders: [
@@ -43,7 +48,10 @@ let resolve = {
 };
 
 let plugins = [
-	new webpack.optimize.DedupePlugin()
+	new webpack.optimize.DedupePlugin(),
+	new webpack.DefinePlugin( {
+		'process.browser': true
+	} )
 	// new webpack.optimize.CommonsChunkPlugin( 'common.js' )
 ];
 
@@ -58,7 +66,7 @@ export default {
 	module: { loaders },
 	entry,
 	output,
-	// externals,
+	externals,
 	resolve,
 	node,
 	plugins

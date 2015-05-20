@@ -7,11 +7,11 @@ import todoStore from 'stores/todo-store';
 global.React = React;
 global.store = todoStore;
 
-import { INIT, ADD, REMOVE, init, add, remove } from 'actions/todo-actions';
-import io from 'io';
-io.on( INIT, init );
-io.on( ADD, add );
-io.on( REMOVE, remove );
+// import { INIT, ADD, REMOVE, init, add, remove } from 'actions/todo-actions';
+// import io from 'io';
+// io.on( INIT, init );
+// io.on( ADD, add );
+// io.on( REMOVE, remove );
 
 export default class MyApp extends React.Component {
 	constructor ( props ) {
@@ -22,7 +22,7 @@ export default class MyApp extends React.Component {
 	}
 
 	componentDidMount () {
-		todoStore.on( this.todosChanged );
+		// todoStore.on( this.todosChanged );
 	}
 
 	componentWillUnmount () {
@@ -41,7 +41,7 @@ export default class MyApp extends React.Component {
 	}
 	todosChanged () {
 		clearTimeout( this._TO );
-		this._TO = setTimeout( this.updateTodos, 50 );
+		this._TO = setTimeout( this.updateTodos, 500 );
 		// this.updateTodos();
 	}
 

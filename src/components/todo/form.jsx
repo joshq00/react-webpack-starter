@@ -1,7 +1,10 @@
 import React from 'react';
-import { ADD } from 'actions/todo-actions';
-import io from 'io';
-let add = todo => io.emit( ADD, todo );
+// import { ADD } from '../actions/todo-actions';
+// import io from '../io';
+import dispatcher from '../dispatcher';
+// let add = todo => io.emit( ADD, todo );
+const CLICK_ADD = 'CLICK_ADD_TODO';
+let add = todo => dispatcher.dispatch( { type: CLICK_ADD, data: todo } );
 
 export default class TodoForm extends React.Component {
 	constructor ( props ) {
@@ -28,6 +31,7 @@ export default class TodoForm extends React.Component {
 		return (
 		<form onSubmit={ this.onSubmit }>
 			inp: <input
+				defaultValue={ 'Do dishes' }
 				onChange={ this.onChange }
 				value={ this.state.title }
 				/>

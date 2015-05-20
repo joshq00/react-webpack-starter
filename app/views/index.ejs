@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+	xmain {
+		float: left;
+		width: 50%;
+		margin: 6em 0 0;
+	}</style>
+</head>
+<body>
+	<main><%- html %></main>
+
+	<!-- // <script src="node_modules/babel-core/browser-polyfill.min.js"></script> -->
+
+	<script src="node_modules/eventsource-polyfill/dist/eventsource.js"></script>
+
+	<script src="node_modules/react/dist/react.js"></script>
+	<script src="node_modules/socket.io-client/socket.io.js"></script>
+
+	<script><%- state %></script>
+	<script src="build/index.js"></script>
+</body>
+</html>

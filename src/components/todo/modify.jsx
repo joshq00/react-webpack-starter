@@ -1,9 +1,11 @@
 import React from 'react';
 import io from '../io';
+import dispatcher from '../dispatcher';
 import store from '../stores/todo-store';
-
+global.dispatcher = dispatcher;
 function addOne ( indx ) {
-	var title = '' + indx;
+	// var title = '' + indx;
+	var title = document.body.querySelector( 'input' ).value;
 	io.emit( 'ADD_TODO', { title: title } );
 }
 function addMany ( num ) {
@@ -15,7 +17,9 @@ global.addMany = addMany;
 
 let empty = ( () => {
 	function remove ( id ) {
-		socket.emit( 'REMOVE_TODO', id );
+		io.emit( 'REMOVE_TODO', id );
+		// let data = { type: 'CLICK_REMOVE_TODO', data: id };
+		// dispatcher.dispatch( data );
 	}
 	function getId ( todo ) {
 		return todo.id;
