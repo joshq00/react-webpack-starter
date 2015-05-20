@@ -2,41 +2,11 @@ import { EventEmitter } from 'events';
 
 /**
  * Base `Store` class
- *
- * Children need to implement `onAction( payload ): void`
  */
 export default class Store extends EventEmitter {
-	// constructor ( dispatcher ) {
-	// 	super();
-	// 	if ( this.onAction === Store.prototype.onAction ) {
-	// 		throw new Error( 'Child class must implement `onAction( payload )`' );
-	// 	}
-
-	// 	this.dispatcher = dispatcher;
-	// 	this.token = dispatcher.register( this.onAction.bind( this ) );
-	// }
-
 	/**
-	 * Handle action from dispatcher
-	 *
-	 * **Child class must implement!**
-	 *
-	 * @param  {any} payload data from dispatcher
+	 * Notify listeners that the store has changed.
 	 */
-	// onAction ( payload ) {}
-
-	/**
-	 * Wait for other stores
-	 *
-	 * @param  {string[]} tokens of stores to wait for
-	 */
-	waitFor ( ids ) {
-		if ( !Array.isArray( ids ) ) {
-			ids = Array.prototype.slice.call( arguments, 0 );
-		}
-		this.dispatcher.waitFor( ids );
-	}
-
 	emit () {
 		return super.emit( this.eventName );
 	}
@@ -80,16 +50,6 @@ export default class Store extends EventEmitter {
 		return this;
 	}
 
-	// addListener ( fn ) {
-	// 	super.addListener( this.eventName, fn );
-	// 	return this;
-	// }
-
-	// removeListener ( fn ) {
-	// 	super.removeListener( this.eventName, fn );
-	// 	return this;
-	// }
-
 	removeAllListeners () {
 		super.removeAllListeners( this.eventName );
 		return this;
@@ -97,8 +57,6 @@ export default class Store extends EventEmitter {
 
 	destroy () {
 		this.removeAllListeners();
-		// this.dispatcher.unregister( this.token );
-		// delete this.dispatcher;
 	}
 }
 Store.prototype.eventName = 'CHANGE';

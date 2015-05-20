@@ -1,16 +1,6 @@
 import io from 'socket.io-client';
 import dispatcher from './dispatcher';
 
-let websocket;
-export default function getSocket () {
-	if ( websocket == null ) {
-		websocket = io();
-	}
-	return websocket;
-}
-
-export let listening = false;
-
 function dispatch ( packet ) {
 	if ( !packet || !packet.data ) {
 		return;
@@ -22,13 +12,14 @@ function dispatch ( packet ) {
 	} );
 }
 
+let listening = false;
 export function listen () {
 	if ( listening ) {
 		return;
 	}
-	global.io = getSocket();
-	let manager = getSocket().io;
+	let manager = io().io;
 	manager.on( 'packet', dispatch );
 	listening = true;
 }
 
+export default io;

@@ -1,4 +1,6 @@
 import dispatcher from '../dispatcher';
+import { removeTodo } from '../utils/todo-api-utils';
+
 import {
 	INIT,
 	ADD,
@@ -31,4 +33,7 @@ export function remove ( ids ) {
 /* Click remove on Todo */
 export function clickRemove ( todo ) {
 	dispatch( CLICK_REMOVE, todo );
+
+	// tell the API to remove it
+	removeTodo( todo.id );
 }

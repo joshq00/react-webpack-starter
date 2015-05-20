@@ -19,7 +19,7 @@ class TodoStore extends Store {
 const store = new TodoStore();
 export default store;
 
-export const handler = ( payload ) => {
+store.token = dispatcher.register( payload => {
 	let { type, data } = payload;
 
 	switch ( type ) {
@@ -36,9 +36,8 @@ export const handler = ( payload ) => {
 		store.emit();
 		break;
 	}
-};
+} );
 
-export const token = dispatcher.register( handler );
 
 let _todos = {};
 
@@ -50,7 +49,16 @@ function getAllTodos () {
 	return Object.keys( _todos ).map( key => _todos[ key ] );
 }
 
+
+let i = 0;
+function getNextId () {
+	return i++;
+}
+
+
 /* initialize */
+init( global.TODOS || [] );
+delete global.TODOS;
 function init ( todos ) {
 	_todos = {};
 
@@ -59,28 +67,16 @@ function init ( todos ) {
 	}
 }
 
-let i = 0;
-function getNextId () {
-	return i++;
-}
-class Todo {
-	constructor ( { id, title } ) {
-		if ( id == null ) {
-			id = getNextId();
-		}
-
-		this.id = id;
-		this.title = title;
-	}
-}
 
 /* add */
 function addTodos ( todos ) {
 	todos.forEach( addTodo );
 }
-function addTodo ( todo ) {
-	todo = new Todo( todo );
-	_todos[ todo.id ] = todo;
+function addTodo ( { id, title } ) {
+	if ( id == null ) {
+		id = getNextId();
+	}
+	_todos[ id ] = { id, title };
 }
 
 

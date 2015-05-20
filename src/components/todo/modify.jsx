@@ -2,7 +2,7 @@ import React from 'react';
 import io from '../io';
 import dispatcher from '../dispatcher';
 import store from '../stores/todo-store';
-global.dispatcher=dispatcher;
+global.dispatcher = dispatcher;
 function addOne ( indx ) {
 	// var title = '' + indx;
 	var title = document.body.querySelector( 'input' ).value;
