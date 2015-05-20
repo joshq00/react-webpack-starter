@@ -57,8 +57,6 @@ function getNextId () {
 
 
 /* initialize */
-init( global.TODOS || [] );
-delete global.TODOS;
 function init ( todos ) {
 	_todos = {};
 
