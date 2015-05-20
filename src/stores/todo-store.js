@@ -7,11 +7,10 @@ import {
 } from '../constants/todo-constants';
 
 class TodoStore extends Store {
-	getOne ( id ) {
-		return getTodo( id );
-	}
-
-	get () {
+	get ( id ) {
+		if ( id != null ) {
+			return getTodo( id );
+		}
 		return getAllTodos();
 	}
 }

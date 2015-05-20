@@ -60,7 +60,8 @@ describe( 'todo-store', function () {
 
 	it( 'generates id', () => {
 		add( [ { title: 'No ID' } ] );
-		expectLength( 1 );
+		add( [ { title: 'No ID' } ] );
+		expectLength( 2 );
 		expect( store.get()[ 0 ] ).to.have.property( 'id' ).that.is.a.number;
 	} );
 
@@ -70,7 +71,7 @@ describe( 'todo-store', function () {
 		add( [ { id: 1, title: 'replacement' } ] );
 		expectLength( 2 );
 
-		expect( store.getOne( 1 ) ).to.have.property( 'title', 'replacement' );
+		expect( store.get( 1 ) ).to.have.property( 'title', 'replacement' );
 	} );
 
 	it( 'does not duplicate', () => {
