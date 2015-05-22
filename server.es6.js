@@ -2,8 +2,8 @@ import express from 'express';
 import path from 'path';
 
 import { app, server } from './app';
-import { render } from './src';
 import TodoStore from './src/stores/todo-store';
+import { render } from './src';
 import './app/listeners';
 
 app.use( express.static( '.' ) );
