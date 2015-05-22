@@ -21,4 +21,4 @@ app.get( '/', ( rq, rs ) => {
 app.set( 'view engine', 'ejs' );
 app.set( 'views', path.join( __dirname, 'app', 'views' ) );
 
-server.listen( 3000 );
+server.listen( process.env.PORT || 3000 );
