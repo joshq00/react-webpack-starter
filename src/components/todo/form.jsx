@@ -1,10 +1,5 @@
 import React from 'react';
-// import { ADD } from '../actions/todo-actions';
-// import io from '../io';
-import dispatcher from '../dispatcher';
-// let add = todo => io.emit( ADD, todo );
-const CLICK_ADD = 'CLICK_ADD_TODO';
-let add = todo => dispatcher.dispatch( { type: CLICK_ADD, data: todo } );
+import { clickAdd as addTodos } from '../../actions/todo-actions';
 
 export default class TodoForm extends React.Component {
 	constructor ( props ) {
@@ -13,7 +8,12 @@ export default class TodoForm extends React.Component {
 		this.onChange = this.onChange.bind( this );
 		this.onSubmit = this.onSubmit.bind( this );
 
-		this.state = { id: null, title: null };
+		this.state = props.todo || {};
+	}
+
+	componentWillReceiveProps ( nextProps ) {
+		let { id, title } = nextProps.todo || {};
+		this.setState( { id, title } );
 	}
 
 	onChange ( e ) {
@@ -22,7 +22,8 @@ export default class TodoForm extends React.Component {
 	}
 
 	onSubmit ( e ) {
-		add( this.state );
+		let { id, title } = this.state;
+		addTodos( [ { id, title } ] );
 		this.setState( { id: null, title: null } );
 		e.preventDefault();
 	}
@@ -31,8 +32,8 @@ export default class TodoForm extends React.Component {
 		return (
 		<form onSubmit={ this.onSubmit }>
 			inp: <input
-				defaultValue={ 'Do dishes' }
 				onChange={ this.onChange }
+				placeholder={ 'Do dishes' }
 				value={ this.state.title }
 				/>
 			<button>Add</button>

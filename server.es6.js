@@ -1,24 +1,14 @@
-import express from 'express';
-import path from 'path';
+import { app, config } from './app';
+config( app );
 
-import { app, server } from './app';
-import TodoStore from './src/stores/todo-store';
-import { render } from './src';
-import './app/listeners';
-
-app.use( express.static( '.' ) );
-
-app.get( '/todos.json', ( rq, rs ) => {
-	rs.json( TodoStore.get() );
-} );
-
-app.get( '/', ( rq, rs ) => {
-	let html = render();
-	rs.expose( TodoStore.get(), 'TODOS' );
-	rs.render( 'index.ejs', { html } );
-} );
-
-app.set( 'view engine', 'ejs' );
-app.set( 'views', path.join( __dirname, 'app', 'views' ) );
-
+import { server } from './app';
+import listenToTodo from './app/todo-listener';
 server.listen( process.env.PORT || 3000 );
+
+import { io } from './app';
+io.on( 'connection', socket => {
+	console.log( 'websocket connected.' );
+	listenToTodo( socket );
+	// socket.on( 'REMOVE_TODOS', data => io.emit( 'REMOVE_TODOS', data ) );
+	// socket.on( 'REMOVE_TODOS', data => io.emit( 'REMOVE_TODOS', data ) );
+} );

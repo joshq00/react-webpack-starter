@@ -10,11 +10,13 @@ let entry = Object.keys( cfg.entry ).reduce( ( map, key ) => {
 	if ( !Array.isArray( val ) ) {
 		val = [ val ];
 	}
+if ( ( /index/ ).test( key ) ) {
 	val.unshift(
 		/* webpack-hot-middleware */
 		'webpack-hot-middleware/client',
 		'webpack/hot/dev-server'
 	);
+}
 	map[ key ] = val;
 	return map;
 }, {} );
@@ -27,7 +29,7 @@ let loaders = [ {
 		'react-hot',
 		'babel'
 	],
-	exclude: /node_modules/
+	exclude: /node_modules|worker/
 }, ...cfg.module.loaders ];
 
 let { resolve } = cfg;

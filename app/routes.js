@@ -1,25 +1,30 @@
 import { Router } from 'express';
-import React from 'react';
-import Blah from '../src/todo/list.jsx';
+import { render } from '../src';
+import TodoStore from '../src/stores/todo-store';
 
+const routes = new Router();
 
-import todoStore from '../src/stores/todo-store';
-// import { init } from '../src/actions/todo-actions';
-// init( [ { id: 0, title: 'zero' } ] );
+routes
+	.get( '/', ( req, res ) => {
+		let html = render();
+		res.render( 'index', { html } );
+	} )
 
+	.get( '/cors', ( req, res ) => {
+		res.json( {
+			it: 'does',
+			work: true
+		} );
+	} )
 
-const route = new Router();
-const f = React.createFactory( Blah );
-route.get( '/', ( rq, rs ) => {
-	let reactOutput = React.renderToString(
-		f( { todos: todoStore.get() } )
-	);
+	.get( '/todos.json', ( req, res ) => {
+		res.json( TodoStore.get() );
+	} )
 
-	let ALL_TODOS = JSON
-		.stringify( todoStore.get() )
-		.replace( /<\//g, '<\\/' )
-		.replace( /<!--/g, '<\\!--' );
+	.get( '/state.js', ( req, res ) => {
+		res.expose( TodoStore.get(), 'TODOS' );
+		res.type( '.js' ).send( res.locals.state.toString() );
+	} )
+	;
 
-	rs.render( 'index.ejs', { reactOutput, ALL_TODOS } );
-} );
-export default route;
+export default routes;
