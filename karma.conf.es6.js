@@ -14,7 +14,7 @@ let frameworks = [ 'mocha' ];
 // list of files / patterns to load in the browser
 let files = [
 	'./node_modules/phantomjs-polyfill/bind-polyfill.js',
-	// './node_modules/babel-core/browser-polyfill.js',
+	'./node_modules/babel-core/browser-polyfill.js',
 	// 'tests.webpack.js'
 	{
 		// pattern: 'src/**/__tests__/*-test.js'
