@@ -3,7 +3,7 @@ config( app );
 
 import { server } from './app';
 import listenToTodo from './app/todo-listener';
-server.listen( process.env.PORT || 3000 );
+server.listen( process.env.VCAP_APP_PORT || process.env.PORT || 3000 );
 
 import { io } from './app';
 io.on( 'connection', socket => {
