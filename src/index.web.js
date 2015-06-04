@@ -7,7 +7,7 @@ listen();
 import { init } from './actions/todo-actions';
 init( global.TODOS || [] );
 delete global.TODOS;
-import TodoStore from './stores/todo-store';
+// import TodoStore from './stores/todo-store';
 // TodoStore.defer( 125 );
 
 // https://github.com/petehunt/react-raf-batching
@@ -40,8 +40,8 @@ global.actions = actions;
 global.socket = io();
 global.process = process;
 
-import Worker from 'worker!./worker';
-global.worker = new Worker();
+// import Worker from 'worker!./worker';
+// global.worker = new Worker();
 
 /*
 var ReactUpdates = global.ReactUpdates = require( 'react/lib/ReactUpdates' );

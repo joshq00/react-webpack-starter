@@ -57,11 +57,14 @@
     "webpack-hot-middleware": "^1.0.0"
   },
   "scripts": {
-    "start": "nodemon -x babel-node -w server.es6.js -w app server.es6.js",
+    "start": "babel-node server.es6.js",
     "postinstall": "npm run build",
     "build": "babel webpack.config.es6.js -o webpack.config.js && webpack -p",
     "dev": "nodemon dev-server.js -w *server*.js -w webpack*.es6.js -w app",
     "test": "karma start --single-run"
+  },
+  "engines": {
+    "node": "^0.12"
   },
   "author": "",
   "license": "ISC"

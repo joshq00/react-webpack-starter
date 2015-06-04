@@ -46,7 +46,7 @@ export default class App extends React.Component {
 		<div>
 			{<TodoForm todo={ active } />}
 			<div>{ this.state.todos.size/*length*/ }</div>
-			<TodoList todos={ this.state.todos } />
+			<TodoList limit={50} todos={ this.state.todos } />
 		</div>
 		);
 	}

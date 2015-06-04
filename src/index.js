@@ -20,7 +20,7 @@ console.log( 'Initialized: %d todos', todoStore.get().length );
 
 import React from 'react/dist/react.min';
 import App from './components/app';
+
 export function render () {
-	// return 'loading';
 	return React.renderToString( <App /> );
 }
