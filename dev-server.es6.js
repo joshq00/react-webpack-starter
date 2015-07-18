@@ -17,3 +17,4 @@ app
 	.use( webpackHotMiddleware( compiler ) );
 
 process.nextTick( () => require( './server.es6' ) );
+// import './server.es6';

@@ -1,9 +1,18 @@
-import app from './app';
-import server from './server';
-import io from './io';
+import express from 'express';
+import expstate from 'express-state';
+import socketio from 'socket.io';
+import { Server } from 'http';
+import config from './config';
 
-export {
+const app = express();
+expstate.extend( app );
+
+const server = new Server( app );
+const io = socketio( server );
+
+export default {
 	app,
-	server,
-	io
+	config,
+	io,
+	server
 };

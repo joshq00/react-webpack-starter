@@ -8,7 +8,7 @@ let entry = {
 
 let output = {
 	path: path.join( __dirname, 'build' ),
-	publicPath: '/build',
+	publicPath: '/build/',
 	filename: '[name].js'
 };
 
@@ -18,7 +18,7 @@ let externals = {
 };
 
 let loaders = [ {
-	test: /\.jsx?$/,
+	test: /\.(jsx?|es6)$/,
 	loaders: [
 		'babel?optional=runtime'
 	],
@@ -42,6 +42,7 @@ let resolve = {
 		'.web.js',
 		'.js',
 		'.jsx',
+		'.web.es6',
 		'.es6',
 		'.json'
 	]
@@ -69,5 +70,12 @@ export default {
 	externals,
 	resolve,
 	node,
-	plugins
+	plugins,
+	worker: {
+		output: {
+			filename: 'worker.js',
+			chunkFilename: '[id].hash.worker.js'
+		},
+		externals: [ 'socket.io-client', 'flux', 'socket.io' ]
+	}
 };

@@ -1,24 +1,15 @@
-import express from 'express';
-import path from 'path';
+import { server } from './app';
+server.listen( process.env.VCAP_APP_PORT || process.env.PORT || 3000 );
 
-import { app, server } from './app';
-import { render } from './src';
-import TodoStore from './src/stores/todo-store';
-import './app/listeners';
+import { app, config } from './app';
+config( app );
 
-app.use( express.static( '.' ) );
+import listenToTodo from './app/todo-listener';
 
-app.get( '/todos.json', ( rq, rs ) => {
-	rs.json( TodoStore.get() );
+import { io } from './app';
+io.on( 'connection', socket => {
+	console.log( 'websocket connected.' );
+	listenToTodo( socket );
+	// socket.on( 'REMOVE_TODOS', data => io.emit( 'REMOVE_TODOS', data ) );
+	// socket.on( 'REMOVE_TODOS', data => io.emit( 'REMOVE_TODOS', data ) );
 } );
-
-app.get( '/', ( rq, rs ) => {
-	let html = render();
-	rs.expose( TodoStore.get(), 'TODOS' );
-	rs.render( 'index.ejs', { html } );
-} );
-
-app.set( 'view engine', 'ejs' );
-app.set( 'views', path.join( __dirname, 'app', 'views' ) );
-
-server.listen( 3000 );

@@ -1,39 +1,51 @@
 import dispatcher from '../dispatcher';
-import { removeTodo } from '../utils/todo-api-utils';
+import { addTodos, removeTodos } from '../utils/todo-api-utils';
 
-import {
-	INIT,
-	ADD,
-	REMOVE,
-	CLICK_REMOVE
-} from '../constants/todo-constants';
+import TodoConstants from '../constants/todo-constants';
+
+export default {
+	init,
+	add,
+	remove,
+	click,
+	clickAdd,
+	clickRemove
+};
+
+/* Initialize Todos */
+function init ( todos ) {
+	dispatch( TodoConstants.INIT, todos );
+}
+
+/* Add new Todos */
+function add ( todos ) {
+	dispatch( TodoConstants.ADD, todos );
+}
+
+/* Remove Todos by id */
+function remove ( ids ) {
+	dispatch( TodoConstants.REMOVE, ids );
+}
+
+/* Click on Todo */
+function click ( todo ) {
+	dispatch( TodoConstants.CLICK, todo.id );
+}
+
+function clickAdd ( todos ) {
+	addTodos( todos );
+}
+/* Click remove on Todo */
+function clickRemove ( ids ) {
+	dispatch( TodoConstants.CLICK_REMOVE, ids );
+
+	// tell the API to remove them
+	removeTodos( ids );
+}
 
 function dispatch ( action, data ) {
 	dispatcher.dispatch( {
 		type: action,
 		data
 	} );
-}
-
-/* Initialize Todos */
-export function init ( todos ) {
-	dispatch( INIT, todos );
-}
-
-/* Add new Todos */
-export function add ( todos ) {
-	dispatch( ADD, todos );
-}
-
-/* Remove Todos by id */
-export function remove ( ids ) {
-	dispatch( REMOVE, ids );
-}
-
-/* Click remove on Todo */
-export function clickRemove ( todo ) {
-	dispatch( CLICK_REMOVE, todo );
-
-	// tell the API to remove it
-	removeTodo( todo.id );
 }

@@ -4,11 +4,35 @@ import { EventEmitter } from 'events';
  * Base `Store` class
  */
 export default class Store extends EventEmitter {
+	constructor ( ...args ) {
+		super( ...args );
+		this.emitNow = this.emitNow.bind( this );
+	}
+	/**
+	 * Defer (async) emits.
+	 *
+	 * Disabled by default
+	 *
+	 * @param  {Number} ms how long to defer emit.
+	 *                     null to disable
+	 */
+	defer ( ms ) {
+		this._defer = ms;
+	}
 	/**
 	 * Notify listeners that the store has changed.
 	 */
+	emitNow () {
+		EventEmitter.prototype.emit.call( this, this.eventName );
+		// super.emit( this.eventName );
+	}
 	emit () {
-		return super.emit( this.eventName );
+		if ( this._defer != null ) {
+			clearTimeout( this._to );
+			this._to = setTimeout( this.emitNow, this._defer );
+			return;
+		}
+		this.emitNow();
 	}
 
 	/**

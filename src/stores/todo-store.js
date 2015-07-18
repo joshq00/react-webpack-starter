@@ -1,17 +1,30 @@
 import dispatcher from '../dispatcher';
 import Store from '../store';
-import {
-	INIT,
-	ADD,
-	REMOVE
-} from '../constants/todo-constants';
+import TodoConstants from '../constants/todo-constants';
+
+export default class Todo {
+	constructor ( { id, title } ) {
+		if ( id == null ) {
+			id = getNextId();
+		}
+
+		this.id = id;
+		this.title = title;
+	}
+}
 
 class TodoStore extends Store {
+	getMap () {
+		return getMap();
+	}
 	get ( id ) {
 		if ( id != null ) {
 			return getTodo( id );
 		}
 		return getAllTodos();
+	}
+	get size () {
+		return getMap().size;
 	}
 }
 
@@ -22,15 +35,15 @@ store.token = dispatcher.register( payload => {
 	let { type, data } = payload;
 
 	switch ( type ) {
-	case INIT:
+	case TodoConstants.INIT:
 		init( data );
 		store.emit();
 		break;
-	case ADD:
+	case TodoConstants.ADD:
 		addTodos( data );
 		store.emit();
 		break;
-	case REMOVE:
+	case TodoConstants.REMOVE:
 		removeTodos( data );
 		store.emit();
 		break;
@@ -38,51 +51,52 @@ store.token = dispatcher.register( payload => {
 } );
 
 
-let _todos = {};
+let _todos = new Map();
+init();
 
 /* getters */
 function getTodo ( id ) {
-	return _todos[ id ];
+	return _todos.get( id );
 }
+
 function getAllTodos () {
-	return Object.keys( _todos ).map( key => _todos[ key ] );
+	return [ ..._todos.values() ];
 }
-
-
-let i = 0;
-function getNextId () {
-	return i++;
+function getMap () {
+	return _todos;
 }
-
 
 /* initialize */
 function init ( todos ) {
-	_todos = {};
-
+	_todos.clear();
+	// _todoset = new Set();
 	if ( Array.isArray( todos ) ) {
 		todos.forEach( addTodo );
 	}
 }
 
+let max = Number.MAX_SAFE_INTEGER - 1;
+let lastId = 0;
+function getNextId () {
+	lastId = ( lastId % max ) + 1;
+	return lastId;
+}
 
 /* add */
 function addTodos ( todos ) {
 	todos.forEach( addTodo );
 }
-function addTodo ( { id, title } ) {
-	if ( id == null ) {
-		id = getNextId();
+function addTodo ( todo ) {
+	if ( todo.id == null ) {
+		todo.id = getNextId();
 	}
-	_todos[ id ] = { id, title };
+	_todos.set( todo.id, Object.freeze( todo ) );
 }
-
 
 /* remove */
 function removeTodos ( ids ) {
 	ids.forEach( removeTodo );
 }
 function removeTodo ( id ) {
-	if ( id in _todos ) {
-		delete _todos[ id ];
-	}
+	_todos.delete( id );
 }
